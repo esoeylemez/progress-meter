@@ -38,7 +38,7 @@ library
     if flag(devel)
         build-depends: rapid
     default-language: Haskell2010
-    ghc-options: -W -fdefer-typed-holes
+    ghc-options: -W
     exposed-modules:
 
 executable SKELETON
@@ -46,7 +46,7 @@ executable SKELETON
         base >= 4.8 && < 4.10,
         SKELETON
     default-language: Haskell2010
-    ghc-options: -W -threaded -fdefer-typed-holes
+    ghc-options: -W -threaded
     hs-source-dirs: programs
     main-is: SKELETON.hs
 
@@ -58,7 +58,7 @@ executable SKELETON-experiment
     else
         buildable: False
     default-language: Haskell2010
-    ghc-options: -threaded -fdefer-typed-holes
+    ghc-options: -W -threaded
     hs-source-dirs: examples
     main-is: experiment.hs
 
@@ -71,6 +71,6 @@ test-suite tests
         tasty-smallcheck,
         SKELETON
     default-language: Haskell2010
-    ghc-options: -W -threaded -with-rtsopts=-N -fdefer-typed-holes
+    ghc-options: -W -threaded -with-rtsopts=-N
     hs-source-dirs: tests
     main-is: Props.hs
