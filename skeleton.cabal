@@ -34,7 +34,7 @@ flag Examples
 
 library
     build-depends:
-        base >= 4.8 && < 5
+        base >= 4.8 && < 4.10
     if flag(devel)
         build-depends: rapid
     default-language: Haskell2010
@@ -43,7 +43,7 @@ library
 
 executable SKELETON
     build-depends:
-        base >= 4.8 && < 5,
+        base >= 4.8 && < 4.10,
         SKELETON
     default-language: Haskell2010
     ghc-options: -W -threaded -fdefer-typed-holes
@@ -53,7 +53,7 @@ executable SKELETON
 executable SKELETON-experiment
     if flag(examples)
         build-depends:
-            base >= 4.8 && < 5,
+            base >= 4.8 && < 4.10,
             SKELETON
     else
         buildable: False
@@ -65,7 +65,7 @@ executable SKELETON-experiment
 test-suite tests
     type: exitcode-stdio-1.0
     build-depends:
-        base >= 4.8 && < 5,
+        base >= 4.8 && < 4.10,
         smallcheck,
         tasty,
         tasty-smallcheck,
