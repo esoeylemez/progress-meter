@@ -67,9 +67,9 @@ test-suite tests
     type: exitcode-stdio-1.0
     build-depends:
         base >= 4.8 && < 4.10,
-        smallcheck,
+        QuickCheck,
         tasty,
-        tasty-smallcheck,
+        tasty-quickcheck,
         SKELETON
     default-language: Haskell2010
     ghc-options: -W -threaded -with-rtsopts=-N
