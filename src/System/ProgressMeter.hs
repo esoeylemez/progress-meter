@@ -271,7 +271,7 @@ runProgress Progress{..} delay h = do
 
             redrawNow = do
                 readTVar _progSignalVar >>= check
-                waitCatchSTM delayA
+                _ <- waitCatchSTM delayA
                 writeTVar _progSignalVar False
                 sep <- readTVar _progSepVar
                 str <- readTVar _progProgsVar >>=
