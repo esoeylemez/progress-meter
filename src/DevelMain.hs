@@ -7,56 +7,52 @@ module DevelMain (update) where
 
 import Control.Concurrent
 import Control.Concurrent.Async
+import Control.Exception
 import Control.Monad
-import Control.Monad.Codensity
-import Control.Monad.IO.Class
 import Data.Foldable
+import Data.IntMap.Strict (IntMap)
+import qualified Data.IntMap.Strict as Mi
+import Data.List (intercalate)
 import Rapid
 import Rapid.Term
 import System.IO
-import System.ProgressMeter
+import System.Progress
 import Text.Printf
 
 
-testApp :: Handle -> IO ()
-testApp h =
-    lowerCodensity $ do
-        pm <- Codensity (hWithProgress 100000 h)
-
-        Codensity $ withAsync $ do
-            m <- appendMeter pm
-            for_ [0,2..50] $ \x -> do
-                setMeter m ('(' : show x ++ ")")
-                threadDelay 200000
-
-        Codensity $ withAsync . withAppendMeter pm $ \m -> do
-            for_ [1,3..1000] $ \x -> do
-                setMeter m ('(' : show x ++ ")")
-                threadDelay 10000
-
-        Codensity $ withAsync $ do
-            for_ [0..] $ \x -> do
-                putMsgLn pm ("M: " ++ show x)
-                threadDelay 1000000
-
-        liftIO (threadDelay 10000000)
-
-
 mainWith :: Handle -> IO ()
-mainWith h =
-    hWithProgress 500000 h $ \prog ->
-        let thread n = do
+mainWith h = withProgress prog $ \pm ->
+    let thread n =
+            (`finally` setMeter tpm Nothing) $ do
                 threadDelay (100000*n)
-                withAppendMeter prog $ \meter -> do
-                    putMsgLn prog (printf "Thread %d started." n)
-                    for_ [0..100 :: Int] $ \p -> do
-                        when (p == 50) $
-                            putMsgLn prog (printf "Thread %d reached half-way point." n)
-                        setMeter meter (printf "T%d: %d%%" n p)
-                        threadDelay (280000 - 40000*n)
-                    putMsgLn prog (printf "Thread %d done." n)
-                    threadDelay 500000
-        in mapConcurrently_ thread [1..6]
+                putMsgLn tpm (printf "Thread %d started." n)
+                for_ [0..100] $ \p -> do
+                    when (p == 50) $
+                        putMsgLn tpm (printf "Thread %d reached half-way point." n)
+                    setMeter tpm (Just p)
+                    threadDelay (280000 - 40000*n)
+                putMsgLn tpm (printf "Thread %d done." n)
+                threadDelay 500000
+
+
+            where
+            tpm = zoomMeter (\f -> Mi.alter f n) pm
+
+    in mapConcurrently_ thread [1..6]
+
+    where
+    render :: IntMap Int -> String
+    render =
+        intercalate " | " .
+        map (\(tid, p) -> printf "%d: %d" tid p) .
+        Mi.assocs
+
+    prog = Progress {
+             progressDelay   = 100000,
+             progressHandle  = h,
+             progressInitial = mempty,
+             progressRender  = render
+           }
 
 
 update :: IO ()

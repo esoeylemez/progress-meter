@@ -11,13 +11,13 @@ bug-reports:  https://github.com/esoeylemez/progress-meter/issues
 license:      BSD3
 license-file: LICENSE
 
-description:  This library can be used to display progress meters or
-    other diagnostics for concurrently running actions.  It supports
-    dynamic creation and removal of new sub-meters as well as correct
-    behaviour when printing diagnostics that are not part of the
-    progress meter and should just scroll by.
+description:  This library can be used to display a progress bar or
+    other live diagnostics for your application.  It supports partial
+    updates from multiple threads without interfering with each other,
+    and it has the correct behaviour when printing diagnostics that are
+    not part of the progress bar and should just scroll by.
     .
-    The @System.ProgressMeter@ module contains a tutorial.
+    The @System.Progress@ module contains a tutorial.
 
 build-type:         Simple
 cabal-version:      >= 1.10
@@ -35,9 +35,9 @@ flag Devel
 
 library
     build-depends:
-        async == 2.1.*,
-        base >= 4.8 && < 4.10,
-        containers == 0.5.*,
+        ansi-terminal >= 0.6 && < 0.8,
+        async >= 2.1.1 && < 2.2,
+        base >= 4.8 && < 4.11,
         stm == 2.4.*
     if flag(devel)
         build-depends: rapid, rapid-term
@@ -45,4 +45,4 @@ library
     ghc-options: -W
     hs-source-dirs: src
     exposed-modules:
-        System.ProgressMeter
+        System.Progress
