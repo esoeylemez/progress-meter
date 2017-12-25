@@ -7,7 +7,7 @@ multiple threads without interfering with each other, and it has the
 correct behaviour when printing diagnostics that are not part of the
 progress bar and should just scroll by.
 
-The @System.Progress@ module contains a tutorial.
+The `System.Progress` module contains a tutorial.
 
 
 Quickstart
