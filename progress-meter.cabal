@@ -35,7 +35,7 @@ flag Devel
 
 library
     build-depends:
-        ansi-terminal >= 0.6 && < 0.8,
+        ansi-terminal >= 0.6 && < 0.9,
         async >= 2.1.1 && < 2.2,
         base >= 4.8 && < 4.11,
         stm == 2.4.*
